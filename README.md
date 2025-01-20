@@ -1,0 +1,3 @@
+# An Old School Runescape tool to determine optimal in-game market values
+
+Alching Today is a little tool I made using the Old School Runescape wiki's API on the in-game market and items in order to determine optimal purchasing. In Runescape, players often train their Magic skill casting High Alchemy, turning an item into its assigned gold value. Using this tool, I hope to determine an optimal purchase based on user criteria so they can quickly determine an item they can easily purchase and make an in-game profit off of.

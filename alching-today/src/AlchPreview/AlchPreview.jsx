@@ -183,17 +183,17 @@ export default function AlchPreview() {
   }
 
   return (
-    <div>
-      <div>{itemName}</div>
-      
-      <div><img className='Icon'
+    <div  className=" text-yellow-300 p-8 gap-2">
+      <h1 className="font-medium">{itemName}</h1>
+      <div className="h-32 flex items-center justify-center">
+        <img className="scale-[2.0] drop-shadow-lg"
       src= {itemIcon}
       alt="new"
       />
       </div>
-      <div className="text-3xl bg-orange-500">GE Value: {value_GE_Avg}</div>
+      <div>GE Value: {value_GE_Avg}</div>
       <div>High Alch: {highAlch}</div>
-      <button onClick={handleClick}>Get Data</button>
+      <button className = "mt-6 px-10 cursor-pointer rounded-full bg-white text-black font-medium drop-shadow-lg" onClick={handleClick}>Get Data</button>
     </div>
   );
 }
