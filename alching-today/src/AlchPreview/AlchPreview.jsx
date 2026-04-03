@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './AlchPreview.css';
 
-export default function AlchPreview({ bestItem, itemName, itemIcon, highAlch, valueHigh }) {
+export default function AlchPreview({ item }) {
   return (
     <div className="text-yellow-300 p-8 gap-2">
-      {bestItem ? (
+      {item ? (
         <>
         <div className="bg-slate-800 rounded-lg shadow-lg p-6">
           <div className="h-32 flex items-center justify-center gap-4">
-            <img className="scale-[2.0] drop-shadow-lg" src={itemIcon} alt={itemName} />
-            <h1 className="font-medium">{itemName}</h1>
+            <img className="scale-[2.0] drop-shadow-lg" src={item.icon} alt={item.name} />
+            <h1 className="font-medium">{item.name}</h1>
           </div>
-          <p>High Alch Value: {highAlch}</p>
-          <p>GE Average Price: {valueHigh}</p>
-          <p>Daily Profit: {bestItem.daily_profit}</p>
-          <p>Trade Limit: {bestItem.trade_limit}</p>
-          <p>Trade Volume: {bestItem.volume}</p>
+          <p>High Alch Value: {item.high_alch}</p>
+          <p>GE Average Price: {item.value_high}</p>
+          <p>Daily Profit: {item.daily_profit}</p>
+          <p>Trade Limit: {item.trade_limit}</p>
+          <p>Trade Volume: NEED TO CALC THIS</p>
         </div>
         </>
       ) : (

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import AlchPreview from './AlchPreview/AlchPreview.jsx';
+
+import './App.css';
 
 let headers = new Headers({
   "Accept"       : "application/json",
@@ -26,14 +29,16 @@ function App() {
   const [count, setCount] = useState(0);
   const [data_GE, setGEData] = useState([]);
   const [allItems, setAllItems] = useState([]);
-  const [bestItem, setBestItem] = useState(null);
-  const [itemName, setName] = useState("No Item Found");
-  const [itemIcon, setIcon] = useState('https://oldschool.runescape.wiki/images/Nature_rune.png');
-  const [highAlch, setHighAlch] = useState(0);
-  const [valueHigh, setValueHigh] = useState(0);
+  const [bestItems, setBestItems] = useState([]);
+  //const [itemName, setName] = useState("No Item Found");
+  //const [itemIcon, setIcon] = useState('https://oldschool.runescape.wiki/images/Nature_rune.png');
+  //const [highAlch, setHighAlch] = useState(0);
+  //const [valueHigh, setValueHigh] = useState(0);
   const [loadingStatus, setLoadingStatus] = useState("LOADING TEXT GOES HERE");
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
+
+  const [emblaRef] = useEmblaCarousel();
 
 //ALL items: https://prices.runescape.wiki/api/v1/osrs/mapping
 //For every item valued above Nature Runes' GE price (ID 561), determine the highest profit difference between avg buy price and High Alch price
@@ -65,18 +70,24 @@ function App() {
         const sortedArray = SortByHighAlch(itemArray);
 
         if (sortedArray && sortedArray.length > 0) {
-          setBestItem(sortedArray[0]);
-          setName(sortedArray[0].name);
 
-          var iconName = sortedArray[0].icon;
+          for (let i = 0; i < 10; i++) { //Set the top 10 best items to alch to be displayed in the carousel
+            if (sortedArray[i]) {
+              setBestItems(prevBestItems => [...prevBestItems, sortedArray[i]]);
+              console.log(sortedArray[i].name);
+            }
+          }
+          //setName(sortedArray[0].name);
 
-          if (iconName)
-            iconName = iconName.replace(/ /g,"_"); //Replace spaces with underscores for URL formatting 
+          //var iconName = sortedArray[0].icon;
+
+          //if (iconName)
+            //iconName = iconName.replace(/ /g,"_"); //Replace spaces with underscores for URL formatting 
 
           //console.log("iconName: " + iconName);
-          setIcon('https://oldschool.runescape.wiki/images/' + iconName);
-          setHighAlch(sortedArray[0].high_alch);
-          setValueHigh(sortedArray[0].value_high);
+          //setIcon('https://oldschool.runescape.wiki/images/' + iconName);
+          //setHighAlch(sortedArray[0].high_alch);
+          //setValueHigh(sortedArray[0].value_high);
         }
         setIsPending(false);
       })
@@ -102,7 +113,13 @@ function App() {
       var itemDatabaseInfo = getDatabaseItemByID(i, mappingData);
       if (itemDatabaseInfo != null) {
         itemInfo.name = itemDatabaseInfo.name;
-        itemInfo.icon = itemDatabaseInfo.icon;
+
+        //Set the icon URL
+        var iconName = itemDatabaseInfo.icon
+        if (iconName)
+          iconName = iconName.replace(/ /g,"_"); //Replace spaces with underscores for URL formatting 
+        itemInfo.icon = 'https://oldschool.runescape.wiki/images/' + iconName;
+
         itemInfo.high_alch = itemDatabaseInfo.highalch;
         itemInfo.trade_limit = itemDatabaseInfo.limit;
         itemInfo.daily_profit = (itemInfo.high_alch - itemInfo.value_high) * itemInfo.trade_limit;
@@ -134,16 +151,18 @@ function App() {
     <>
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-400 to-slate-800">
         <header>
-          <div>
-            <AlchPreview 
-              bestItem={bestItem}
-              itemName={itemName}
-              itemIcon={itemIcon}
-              highAlch={highAlch}
-              valueHigh={valueHigh}
-            />
-            <div className="font-medium">{loadingStatus}</div>
+          <div className="embla__viewport" ref={emblaRef}>
+            <div className="embla__container">
+              {bestItems.map((currentItem, index) => (
+              <div key={index} style={{ cursor: "pointer" }} className={"embla__slide"}>
+                    <AlchPreview 
+                      item={bestItems[index]}
+                    />
+                </div>
+              ))}
+            </div>
           </div>
+          <div className="font-medium">{loadingStatus}</div>
         </header>
       </div>
     </>
