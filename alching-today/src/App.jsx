@@ -23,6 +23,7 @@ function Item_GE() {
   var high_alch = 0;
   var trade_limit = 0;
   var daily_profit = 0;
+  var volume = 1;
 };
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
   const [data_GE, setGEData] = useState([]);
   const [allItems, setAllItems] = useState([]);
   const [bestItems, setBestItems] = useState([]);
+  const [itemVolumes, setItemVolumes] = useState([]);
   //const [itemName, setName] = useState("No Item Found");
   //const [itemIcon, setIcon] = useState('https://oldschool.runescape.wiki/images/Nature_rune.png');
   //const [highAlch, setHighAlch] = useState(0);
@@ -37,6 +39,8 @@ function App() {
   const [loadingStatus, setLoadingStatus] = useState("LOADING TEXT GOES HERE");
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
+
+  const [natureRune, setNatureRune] = useState(null);
 
   const [emblaRef] = useEmblaCarousel();
 
@@ -49,6 +53,8 @@ function App() {
 //Get items using https://prices.runescape.wiki/api/v1/osrs/1h for hourly avg price
 
 //TODO: Use https://prices.runescape.wiki/api/v1/osrs/6h to determine trade volume per item to give realistic results
+//ITEM VOLUMES: https://oldschool.runescape.wiki/?title=Module:GEVolumes/data.json&action=raw&ctype=application%2Fjson
+
 
   // Fetch data on component mount (only once)
   useEffect(() => {
@@ -60,13 +66,22 @@ function App() {
       fetch('https://prices.runescape.wiki/api/v1/osrs/mapping', {
         method: "GET",
         headers: { "Alching-Today-portfolio": headers }
-      })
-    ])
+      }),
+      fetch('https://oldschool.runescape.wiki/?title=Module:GEVolumes/data.json&action=raw&ctype=application%2Fjson')
+      ])
       .then((res) => Promise.all(res.map((response) => response.json())))
-      .then(([latestData, mappingData]) => {
+      .then(([latestData, mappingData, itemVolumesData]) => {
         setGEData(latestData);
         setAllItems(mappingData);
-        const itemArray = Init_GE_Data_Array(latestData, mappingData);
+        setItemVolumes(itemVolumesData);
+
+        //TODO: Display the cost of Nature Runes in one of the corners eventually
+        const natureRuneData = getDatabaseItemByID(561, mappingData);
+        console.log("Nature Rune Data:", natureRuneData);
+
+        const itemArray = Init_GE_Data(latestData, mappingData, itemVolumesData);
+        setNatureRune(natureRuneData);
+
         const sortedArray = SortByHighAlch(itemArray);
 
         if (sortedArray && sortedArray.length > 0) {
@@ -77,17 +92,6 @@ function App() {
               console.log(sortedArray[i].name);
             }
           }
-          //setName(sortedArray[0].name);
-
-          //var iconName = sortedArray[0].icon;
-
-          //if (iconName)
-            //iconName = iconName.replace(/ /g,"_"); //Replace spaces with underscores for URL formatting 
-
-          //console.log("iconName: " + iconName);
-          //setIcon('https://oldschool.runescape.wiki/images/' + iconName);
-          //setHighAlch(sortedArray[0].high_alch);
-          //setValueHigh(sortedArray[0].value_high);
         }
         setIsPending(false);
       })
@@ -98,36 +102,34 @@ function App() {
       });
   }, []); // Runs once on mount
 
-  function Init_GE_Data_Array(latestData, mappingData) {
-    const data_GE_ARRAY = [];  // Create local array instead of using undefined variable
+  function Init_GE_Data(latestData, mappingData, itemVolumesData) {
+    const data_GE_ARRAY = [];
+
+    //Get the current price of Nature Runes
+    const natureRunePrice = latestData.data['561']?.high || 0;
+
     for (var i in latestData.data) {
-      //NOTE: Currently this can include unobtainable items, if they can be detected (ex. 0 GE price) it'd be best to exclude them.
       var itemInfo = new Item_GE();
       itemInfo.id = i;
       itemInfo.value_high = latestData.data[i].high;
 
-      //NOTE: ONLY use value_high for calculating daily profit
-      //itemInfo.value_low = latestData.data[i].low;
-      //itemInfo.value_avg = Math.floor((latestData.data[i].high + latestData.data[i].low) / 2);
-
-      var itemDatabaseInfo = getDatabaseItemByID(i, mappingData);
-      if (itemDatabaseInfo != null) {
-        itemInfo.name = itemDatabaseInfo.name;
-
-        //Set the icon URL
-        var iconName = itemDatabaseInfo.icon
+      var currentItemInfo = getDatabaseItemByID(i, mappingData);
+      if (currentItemInfo != null) {
+        itemInfo.name = currentItemInfo.name;
+        var iconName = currentItemInfo.icon
         if (iconName)
-          iconName = iconName.replace(/ /g,"_"); //Replace spaces with underscores for URL formatting 
+          iconName = iconName.replace(/ /g,"_");
         itemInfo.icon = 'https://oldschool.runescape.wiki/images/' + iconName;
+        itemInfo.high_alch = currentItemInfo.highalch;
+        itemInfo.trade_limit = currentItemInfo.limit;
 
-        itemInfo.high_alch = itemDatabaseInfo.highalch;
-        itemInfo.trade_limit = itemDatabaseInfo.limit;
-        itemInfo.daily_profit = (itemInfo.high_alch - itemInfo.value_high) * itemInfo.trade_limit;
+        itemInfo.daily_profit = (itemInfo.high_alch - itemInfo.value_high - natureRunePrice) * itemInfo.trade_limit;
+        itemInfo.volume = getVolumeForItem(itemInfo.name, itemVolumesData) || 1; 
       }
       data_GE_ARRAY.push(itemInfo);
     }
     console.log("Initialized data_GE_ARRAY:", data_GE_ARRAY);
-    return data_GE_ARRAY;  // Return it so you can use it elsewhere
+    return data_GE_ARRAY;
   }
 
   function getDatabaseItemByID(id, mappingData) {
@@ -135,6 +137,11 @@ function App() {
       if (mappingData[i].id == id)
         return mappingData[i];
     }
+  }
+
+  function getVolumeForItem(name, itemVolumesData) {
+      if (itemVolumesData[name])
+        return itemVolumesData[name];
   }
 
   function SortByHighAlch(data_GE_ARRAY) {

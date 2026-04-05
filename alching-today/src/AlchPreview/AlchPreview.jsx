@@ -11,11 +11,11 @@ export default function AlchPreview({ item }) {
             <img className="scale-[2.0] drop-shadow-lg" src={item.icon} alt={item.name} />
             <h1 className="font-medium">{item.name}</h1>
           </div>
-          <p>High Alch Value: {item.high_alch}</p>
-          <p>GE Average Price: {item.value_high}</p>
-          <p>Daily Profit: {item.daily_profit}</p>
-          <p>Trade Limit: {item.trade_limit}</p>
-          <p>Trade Volume: NEED TO CALC THIS</p>
+          <p>High Alch Value: {item.high_alch.toLocaleString()}</p>
+          <p>GE Average Price: {item.value_high.toLocaleString()}</p>
+          <p>Daily Profit: {item.daily_profit.toLocaleString()}</p>
+          <p>Trade Limit: {item.trade_limit.toLocaleString()}</p>
+          <p>Trade Volume: {item.volume.toLocaleString()}</p>
         </div>
         </>
       ) : (

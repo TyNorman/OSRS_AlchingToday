@@ -5,10 +5,10 @@
 .embla__container {
   display: flex;
   touch-action: pan-y pinch-zoom;
-  gap: 10px; /* spacing between slides */
+  gap: 8px; /* spacing between slides */
 }
 
 .embla__slide {
-  flex: 0 0 10%;
+  flex: 0 0 15%;
   min-width: 0;
 }
