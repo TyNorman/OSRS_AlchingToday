@@ -3,7 +3,15 @@ import useEmblaCarousel from 'embla-carousel-react';
 
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+
 import AlchPreview from './AlchPreview/AlchPreview.jsx';
+import NatureRunePanel from './AlchPreview/NatureRunePanel.jsx';
+
+import {
+  NextButton,
+  PrevButton,
+  usePrevNextButtons
+} from './AlchPreview/CarouselButton.jsx';
 
 import './App.css';
 
@@ -42,7 +50,13 @@ function App() {
 
   const [natureRune, setNatureRune] = useState(null);
 
-  const [emblaRef] = useEmblaCarousel();
+  const [emblaRef, emblaApi] = useEmblaCarousel({loop: true});
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick
+  } = usePrevNextButtons(emblaApi);
 
 //ALL items: https://prices.runescape.wiki/api/v1/osrs/mapping
 //For every item valued above Nature Runes' GE price (ID 561), determine the highest profit difference between avg buy price and High Alch price
@@ -79,21 +93,32 @@ function App() {
         const natureRuneData = getDatabaseItemByID(561, mappingData);
         console.log("Nature Rune Data:", natureRuneData);
 
-        const itemArray = Init_GE_Data(latestData, mappingData, itemVolumesData);
-        setNatureRune(natureRuneData);
+      const natureRunePrice = latestData.data['561']?.high || 180; //180 is the best price by NPCs while waiting to load
+  
+      // Set the Nature Rune data needed for the NatureRunePanel
+      const completeNatureRuneData = {
+        name: natureRuneData.name,
+        icon: 'https://oldschool.runescape.wiki/images/' + natureRuneData.icon.replace(/ /g,"_"),
+        value: natureRunePrice
+      };
+  
+      console.log("Nature Rune Data:", completeNatureRuneData);
+      setNatureRune(completeNatureRuneData);
 
-        const sortedArray = SortByHighAlch(itemArray);
+      const itemArray = Init_GE_Data(latestData, mappingData, itemVolumesData);
 
-        if (sortedArray && sortedArray.length > 0) {
+      const sortedArray = SortByHighAlch(itemArray);
 
-          for (let i = 0; i < 10; i++) { //Set the top 10 best items to alch to be displayed in the carousel
-            if (sortedArray[i]) {
-              setBestItems(prevBestItems => [...prevBestItems, sortedArray[i]]);
-              console.log(sortedArray[i].name);
-            }
+      if (sortedArray && sortedArray.length > 0) {
+
+        for (let i = 0; i < 10; i++) { //Set the top 10 best items to alch to be displayed in the carousel
+          if (sortedArray[i]) {
+            setBestItems(prevBestItems => [...prevBestItems, sortedArray[i]]);
+            console.log(sortedArray[i].name);
           }
         }
-        setIsPending(false);
+      }
+      setIsPending(false);
       })
       .catch((err) => {
         console.error(err);
@@ -139,6 +164,13 @@ function App() {
     }
   }
 
+  function getGEDataByID(id, latestData) {
+    for (var i in latestData.data) {
+      if (i == id)
+        return latestData.data[i];
+    }
+  }
+
   function getVolumeForItem(name, itemVolumesData) {
       if (itemVolumesData[name])
         return itemVolumesData[name];
@@ -156,8 +188,8 @@ function App() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-400 to-slate-800">
-        <header>
+      <div className="min-h-screen bg-gradient-to-b from-gray-400 to-slate-800">
+        <div className="alch-carousel px-8">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
               {bestItems.map((currentItem, index) => (
@@ -169,8 +201,16 @@ function App() {
               ))}
             </div>
           </div>
-          <div className="font-medium">{loadingStatus}</div>
-        </header>
+        </div>    
+
+        <div className="embla__buttons">
+          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+        </div>
+
+        <div className="nature_rune_display">
+          <NatureRunePanel natureRuneInfo={natureRune} />
+        </div>
       </div>
     </>
   );
