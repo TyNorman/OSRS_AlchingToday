@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import backgroundVideo from './assets/Alching_BG.mp4';
 
 import AlchPreview from './AlchPreview/AlchPreview.jsx';
 import NatureRunePanel from './AlchPreview/NatureRunePanel.jsx';
@@ -113,8 +112,9 @@ function App() {
 
         for (let i = 0; i < 10; i++) { //Set the top 10 best items to alch to be displayed in the carousel
           if (sortedArray[i]) {
+            sortedArray[i].index = i + 1; 
             setBestItems(prevBestItems => [...prevBestItems, sortedArray[i]]);
-            console.log(sortedArray[i].name);
+            console.log(sortedArray[i].name + " | index: " + sortedArray[i].index);
           }
         }
       }
@@ -188,7 +188,10 @@ function App() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-gray-400 to-slate-800">
+    <div className="h-screen bg-gradient-to-b from-gray-400 to-slate-800">
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm backdrop-brightness-50"></div>
+      <video src={backgroundVideo} autoPlay loop muted/>
+      <div className="content">
         <div className="alch-carousel px-8">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
@@ -204,12 +207,13 @@ function App() {
         </div>    
 
         <div className="embla__buttons">
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          <PrevButton className="text-yellow-300" onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+          <NextButton className="text-yellow-300" onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
 
         <div className="nature_rune_display">
           <NatureRunePanel natureRuneInfo={natureRune} />
+        </div>
         </div>
       </div>
     </>

@@ -1,3 +1,13 @@
 .dropShadow {
     filter: drop-shadow(5px 5px 5px #000000);
 }
+
+.index-display {
+    border: 0.2rem solid var(--detail-medium-contrast);
+    border-radius: 1.8rem;
+    font-size: 4rem;
+    align-items: right;
+    justify-content: right;
+    user-select: none;
+    display: inline-flex;
+}

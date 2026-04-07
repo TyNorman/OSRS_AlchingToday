@@ -6,7 +6,10 @@ export default function AlchPreview({ item }) {
     <div className="text-yellow-300 p-8 gap-2">
       {item ? (
         <>
-        <div className="bg-slate-800 rounded-lg shadow-lg p-6">
+        <div className="bg-taupe-500 rounded-lg shadow-lg p-6">
+          <div className="index-display">
+            {item.index}
+          </div>
           <div className="h-32 flex items-center justify-center gap-4">
             <img className="scale-[2.0] drop-shadow-lg" src={item.icon} alt={item.name} />
             <h1 className="font-medium">{item.name}</h1>
