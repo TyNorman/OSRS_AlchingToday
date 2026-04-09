@@ -39,17 +39,14 @@ function App() {
   const [allItems, setAllItems] = useState([]);
   const [bestItems, setBestItems] = useState([]);
   const [itemVolumes, setItemVolumes] = useState([]);
-  //const [itemName, setName] = useState("No Item Found");
-  //const [itemIcon, setIcon] = useState('https://oldschool.runescape.wiki/images/Nature_rune.png');
-  //const [highAlch, setHighAlch] = useState(0);
-  //const [valueHigh, setValueHigh] = useState(0);
+  const [alchsPerHour, setAlchsPerHour] = useState(1000);
   const [loadingStatus, setLoadingStatus] = useState("LOADING TEXT GOES HERE");
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
 
   const [natureRune, setNatureRune] = useState(null);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({loop: true});
+  const [emblaRef, emblaApi] = useEmblaCarousel({loop: true, dragFree: true});
   const {
     prevBtnDisabled,
     nextBtnDisabled,
@@ -141,15 +138,15 @@ function App() {
       var currentItemInfo = getDatabaseItemByID(i, mappingData);
       if (currentItemInfo != null) {
         itemInfo.name = currentItemInfo.name;
-        var iconName = currentItemInfo.icon
+        var iconName = currentItemInfo.icon;
         if (iconName)
           iconName = iconName.replace(/ /g,"_");
         itemInfo.icon = 'https://oldschool.runescape.wiki/images/' + iconName;
         itemInfo.high_alch = currentItemInfo.highalch;
         itemInfo.trade_limit = currentItemInfo.limit;
-
-        itemInfo.daily_profit = (itemInfo.high_alch - itemInfo.value_high - natureRunePrice) * itemInfo.trade_limit;
         itemInfo.volume = getVolumeForItem(itemInfo.name, itemVolumesData) || 1; 
+        itemInfo.daily_profit = (itemInfo.high_alch - itemInfo.value_high - natureRunePrice) * itemInfo.trade_limit;
+        
       }
       data_GE_ARRAY.push(itemInfo);
     }
@@ -186,19 +183,25 @@ function App() {
     return data_GE_ARRAY;
   }
 
+  function handleAlchsPerHourChange(e) {
+    var alchsPerHour = Math.min(Math.max(e.target.value, 0), 1200); //Cap the input alchs per hour to 1200 because no one is having that APM and has to wait for game ticks
+    setAlchsPerHour(alchsPerHour || 0);
+}
+
   return (
     <>
     <div className="h-screen bg-gradient-to-b from-gray-400 to-slate-800">
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm backdrop-brightness-50"></div>
       <video src={backgroundVideo} autoPlay loop muted/>
       <div className="content">
+        <h1 className="text-4xl text-yellow-300 text-center font-bold mb-4 p-8">Here are 10 of the best items to consider high alching today:</h1>
         <div className="alch-carousel px-8">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
               {bestItems.map((currentItem, index) => (
               <div key={index} style={{ cursor: "pointer" }} className={"embla__slide"}>
                     <AlchPreview 
-                      item={bestItems[index]}
+                      item={bestItems[index]} natureRuneCost={natureRune.value} alchsPerHour={alchsPerHour}
                     />
                 </div>
               ))}
@@ -212,7 +215,7 @@ function App() {
         </div>
 
         <div className="nature_rune_display">
-          <NatureRunePanel natureRuneInfo={natureRune} />
+          <NatureRunePanel natureRuneInfo={natureRune} alchsPerHour={alchsPerHour} onAlchsPerHourChange={handleAlchsPerHourChange} />
         </div>
         </div>
       </div>

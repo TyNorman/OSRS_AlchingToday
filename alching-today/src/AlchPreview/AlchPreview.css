@@ -3,11 +3,51 @@
 }
 
 .index-display {
-    border: 0.2rem solid var(--detail-medium-contrast);
-    border-radius: 1.8rem;
-    font-size: 4rem;
-    align-items: right;
-    justify-content: right;
+    font-size: 2rem;
     user-select: none;
+    display: flex;
+    justify-content: right;
+    align-self: flex-end;
+    top:0%;
+    padding-right: 2%;
+    border-style: double;
+    border: #ffffff;
+    border-radius: 2%;
+}
+
+.alch-item {
+    /* h-32 flex items-center justify-center gap-4 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    margin-bottom: 10%;
+    gap: 32px;
+}
+
+.alch-item img {
+    image-rendering: pixelated;
+}
+
+.alch-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+}
+
+.nature-rune-panel {
+    margin: 0;
+    padding: 0;
+}
+
+.input-alchs-per-hour {
     display: inline-flex;
+    justify-content: flex-end;
+    flex-direction: row;
+}
+
+.input-alchs-per-hour p {
+    margin-right: 10px;
 }

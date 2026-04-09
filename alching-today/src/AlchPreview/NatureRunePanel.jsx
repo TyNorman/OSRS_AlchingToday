@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './AlchPreview.css';
 
-export default function NatureRunePanel({ natureRuneInfo }) {
+export default function NatureRunePanel({ natureRuneInfo, alchsPerHour, onAlchsPerHourChange }) {
   return (
-    <div className="text-yellow-300 p-8 gap-2">
+    <div className="nature-rune-panel text-yellow-300">
         {natureRuneInfo ? (
         <>
         <div className="bg-taupe-500 rounded-lg shadow-lg p-6">
-          <div className="h-32 flex items-center justify-center gap-4">
+          <div className="alch-item p-6">
             <img className="scale-[2.0] drop-shadow-lg" src={natureRuneInfo.icon} alt={natureRuneInfo.name} />
             <h1 className="font-medium">{natureRuneInfo.name}</h1>
           </div>
           <p>GE Average Price: {natureRuneInfo.value ? natureRuneInfo.value.toLocaleString() : 'Loading...'}</p>
+          <div className="input-alchs-per-hour">
+            <p>Alchs Per Hour:</p>
+            <input name="alchsPerHour" className="alchs-per-hour-input bg-taupe-600" type="number" min="0" max="1300" value={alchsPerHour} onChange={onAlchsPerHourChange} />
+          </div>
         </div>
         </>
         ) : (

@@ -20,18 +20,17 @@ video {
   margin-top: auto;  /* Pushes it toward bottom */
 }
 
+/* Embla Carousel Formatting */
 .alch-carousel {
-  width: 90%;
+  max-width: 90%;
   margin: auto;
   position: relative;
 
-  --slide-height: 19rem;
+  --slide-height: 100%;
   --slide-spacing: 1rem;
   --slide-size: 25%;
 }
 
-
-/* Embla Carousel Formatting */
 .embla__viewport {
   overflow: hidden;
 }
@@ -39,7 +38,7 @@ video {
 .embla__container {
   display: flex;
   touch-action: pan-y pinch-zoom;
-  
+  margin-left: calc(var(--slide-spacing) * -1);
 }
 
 .embla__slide {
@@ -56,7 +55,7 @@ video {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: var(--slide-height);
+  height: 10%;
   user-select: none;
 }
 
@@ -64,7 +63,7 @@ video {
   display: flex;
   grid-template-columns: auto 1fr;
   justify-content: space-between;
-  gap: 1.2rem;
+  gap: 10rem;
   margin-top: 1.8rem;
 }
 
