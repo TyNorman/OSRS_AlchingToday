@@ -25,8 +25,6 @@ function Item_GE() {
   var name = "null";
   var icon = "null";
   var value_high = 0;
-  var value_low = 0;
-  var value_avg = 0;
   var high_alch = 0;
   var trade_limit = 0;
   var daily_profit = 0;
@@ -35,9 +33,10 @@ function Item_GE() {
 
 function App() {
   const [count, setCount] = useState(0);
-  const [data_GE, setGEData] = useState([]);
-  const [allItems, setAllItems] = useState([]);
-  const [bestItems, setBestItems] = useState([]);
+  const [data_GE, setGEData] = useState([]); //Data from the Grand Exchange
+  const [allItems, setAllItems] = useState([]); //Item mapping data (names, values, icons)
+  const [bestItems, setBestItems] = useState([]); //Top 10 best items to display in the carousel
+  const [compiledGEItems, setCompiledGEItems] = useState([]); //Combined data from GE data and item mapping to contain all the useful info we need
   const [itemVolumes, setItemVolumes] = useState([]);
   const [alchsPerHour, setAlchsPerHour] = useState(1000);
   const [loadingStatus, setLoadingStatus] = useState("LOADING TEXT GOES HERE");
@@ -102,19 +101,8 @@ function App() {
       setNatureRune(completeNatureRuneData);
 
       const itemArray = Init_GE_Data(latestData, mappingData, itemVolumesData);
+      setCompiledGEItems(itemArray);
 
-      const sortedArray = SortByHighAlch(itemArray);
-
-      if (sortedArray && sortedArray.length > 0) {
-
-        for (let i = 0; i < 10; i++) { //Set the top 10 best items to alch to be displayed in the carousel
-          if (sortedArray[i]) {
-            sortedArray[i].index = i + 1; 
-            setBestItems(prevBestItems => [...prevBestItems, sortedArray[i]]);
-            console.log(sortedArray[i].name + " | index: " + sortedArray[i].index);
-          }
-        }
-      }
       setIsPending(false);
       })
       .catch((err) => {
@@ -123,6 +111,12 @@ function App() {
         setIsPending(false);
       });
   }, []); // Runs once on mount
+
+  useEffect(() => {
+    if (compiledGEItems.length > 0 && natureRune) {
+      handleSortChange('profitVolume');
+    }
+  }, [compiledGEItems, natureRune]);
 
   function Init_GE_Data(latestData, mappingData, itemVolumesData) {
     const data_GE_ARRAY = [];
@@ -173,11 +167,43 @@ function App() {
         return itemVolumesData[name];
   }
 
-  function SortByHighAlch(data_GE_ARRAY) {
-    console.log("START SortByHighAlch()");
+  function handleSortChange(sortMethod) {
+  let sortedArray = [...compiledGEItems]; // Create a copy to avoid mutating the original
+  
+  if (sortMethod === 'profitValue') {
+    sortedArray = SortByHighAlch_MaxProfit(sortedArray, natureRune.value);
+  } else if (sortMethod === 'profitVolume') {
+    sortedArray = SortByHighAlch_Volume(sortedArray);
+  }
+  
+  if (sortedArray && sortedArray.length > 0) {
+    const topTenItems = [];
+    for (let i = 0; i < 10; i++) { // Get the top 10 best items to alch
+      if (sortedArray[i]) {
+        sortedArray[i].index = i + 1; 
+        topTenItems.push(sortedArray[i]);
+        console.log(sortedArray[i].name + " | index: " + sortedArray[i].index);
+      }
+    }
+    setBestItems(topTenItems); // Replace the entire array once with the new top 10
+  }
+}
+
+  function SortByHighAlch_Volume(data_GE_ARRAY) {
+    console.log("START SortByHighAlch_Volume()");
     
     // Sort by daily_profit in descending order (highest profit first)
     data_GE_ARRAY.sort((a, b) => b.daily_profit - a.daily_profit);
+
+    console.log("SORTED by daily_profit:", JSON.stringify(data_GE_ARRAY));
+    return data_GE_ARRAY;
+  }
+
+  function SortByHighAlch_MaxProfit(data_GE_ARRAY, natureRunePrice) {
+    console.log("START SortByHighAlch_MaxProfit()");
+    
+    // Sort by daily_profit in descending order (highest profit first)
+    data_GE_ARRAY.sort((a, b) => (b.high_alch - b.value_high - natureRunePrice) - (a.high_alch - a.value_high - natureRunePrice));
 
     console.log("SORTED by daily_profit:", JSON.stringify(data_GE_ARRAY));
     return data_GE_ARRAY;
@@ -215,7 +241,7 @@ function App() {
         </div>
 
         <div className="nature_rune_display">
-          <NatureRunePanel natureRuneInfo={natureRune} alchsPerHour={alchsPerHour} onAlchsPerHourChange={handleAlchsPerHourChange} />
+          <NatureRunePanel natureRuneInfo={natureRune} alchsPerHour={alchsPerHour} onAlchsPerHourChange={handleAlchsPerHourChange} onSortChange={handleSortChange} />
         </div>
         </div>
       </div>
