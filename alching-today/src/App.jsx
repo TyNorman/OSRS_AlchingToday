@@ -3,14 +3,15 @@ import useEmblaCarousel from 'embla-carousel-react';
 
 import backgroundVideo from './assets/Alching_BG.mp4';
 
-import AlchPreview from './AlchPreview/AlchPreview.jsx';
-import NatureRunePanel from './AlchPreview/NatureRunePanel.jsx';
+import AlchPreview from './Components/AlchPreview.jsx';
+import NatureRunePanel from './Components/NatureRunePanel.jsx';
+import InfoPanel from './Components/InfoPanel.jsx';
 
 import {
   NextButton,
   PrevButton,
   usePrevNextButtons
-} from './AlchPreview/CarouselButton.jsx';
+} from './Components/CarouselButton.jsx';
 
 import './App.css';
 
@@ -216,11 +217,12 @@ function App() {
 
   return (
     <>
-    <div className="h-screen bg-gradient-to-b from-gray-400 to-slate-800">
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm backdrop-brightness-50"></div>
-      <video src={backgroundVideo} autoPlay loop muted/>
+    <div className="background bg-gradient-to-b from-gray-400 to-slate-800">
+      <div className="overlay bg-black/30 backdrop-blur-sm backdrop-brightness-50"></div>
+        <video src={backgroundVideo} autoPlay loop muted/>
       <div className="content">
-        <h1 className="text-4xl text-yellow-300 text-center font-bold mb-4 p-8">Here are 10 of the best items to consider high alching today:</h1>
+        <h1 className="text-4xl text-yellow-300 text-center font-bold mb-4 p-8">Alching Today</h1>
+        <h2 className="text-2xl text-yellow-300 text-center font-bold mb-4">Here are 10 of the best items to consider high alching today:</h2>
         <div className="alch-carousel px-8">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
@@ -240,9 +242,16 @@ function App() {
           <NextButton className="text-yellow-300" onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
 
-        <div className="nature_rune_display">
-          <NatureRunePanel natureRuneInfo={natureRune} alchsPerHour={alchsPerHour} onAlchsPerHourChange={handleAlchsPerHourChange} onSortChange={handleSortChange} />
+
+        <div className="bottom_content">
+          <div className="info_display">
+            <InfoPanel/>
+          </div>
+          <div className="nature_rune_display">
+            <NatureRunePanel natureRuneInfo={natureRune} alchsPerHour={alchsPerHour} onAlchsPerHourChange={handleAlchsPerHourChange} onSortChange={handleSortChange} />
+          </div>
         </div>
+
         </div>
       </div>
     </>

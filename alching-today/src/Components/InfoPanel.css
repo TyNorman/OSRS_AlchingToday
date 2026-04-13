@@ -1,0 +1,9 @@
+.info-panel {
+    justify-content: center;
+    text-align: left;
+}
+
+.info-panel h1{
+    font-size: large;
+    font-weight: bold;
+}

@@ -16,7 +16,6 @@
 }
 
 .alch-item {
-    /* h-32 flex items-center justify-center gap-4 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -40,6 +39,23 @@
 .nature-rune-panel {
     margin: 0;
     padding: 0;
+}
+
+.nature-rune {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    margin-bottom: 10%;
+    gap: 32px;
+}
+
+.nature-rune h1 {
+    display: block;
+}
+
+.nature-rune p {
+    display: block;
 }
 
 .input-alchs-per-hour {
