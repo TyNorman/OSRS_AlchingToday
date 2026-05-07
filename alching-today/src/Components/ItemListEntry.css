@@ -1,0 +1,22 @@
+.item_entry {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    padding: 10px;
+    border-bottom: 1px solid #646464;
+    cursor: pointer;
+}
+
+.item_details {
+    margin-left: 10px;
+    color: #ffffff;
+    font-style: bold;
+    font-size: 10px;
+}
+
+.item_entry img {
+    image-rendering: pixelated;
+    scale: 1.0;
+    width: 32px;
+    height: 32px;
+}

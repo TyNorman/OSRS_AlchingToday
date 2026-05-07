@@ -15,7 +15,7 @@ export default function NatureRunePanel({ natureRuneInfo, alchsPerHour, onAlchsP
         <>
         <div className="bg-taupe-500 rounded-lg shadow-lg p-6">
           <div className="nature-rune p-6">
-            <img className="scale-[2.0] drop-shadow-lg" src={natureRuneInfo.icon} alt={natureRuneInfo.name} />
+            <img className="drop-shadow-lg" src={natureRuneInfo.icon} alt={natureRuneInfo.name} />
             <h1 className="font-medium">{natureRuneInfo.name}</h1>
             <p>GE Average Price: {natureRuneInfo.value ? natureRuneInfo.value.toLocaleString() : 'Loading...'}</p>
           </div>

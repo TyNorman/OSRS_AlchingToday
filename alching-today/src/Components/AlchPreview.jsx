@@ -11,7 +11,7 @@ export default function AlchPreview({ item, natureRuneCost, alchsPerHour }) {  r
             {item.index}
           </div>
           <div className="alch-item">
-            <img className="scale-[2.0] drop-shadow-lg" src={item.icon} alt={item.name} />
+            <img className="drop-shadow-lg" src={item.icon} alt={item.name} />
             <h1 className="font-medium">{item.name}</h1>
           </div>
           <div className="alch-info">

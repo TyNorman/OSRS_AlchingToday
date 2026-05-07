@@ -7,3 +7,13 @@
     font-size: large;
     font-weight: bold;
 }
+
+@media only screen and (max-width: 640px)  { 
+.info-panel h1{
+    font-size: small;
+    font-weight: bold;
+}
+.info-panel p {
+    font-size: small;
+}
+}

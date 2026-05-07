@@ -6,6 +6,7 @@ import backgroundVideo from './assets/Alching_BG.mp4';
 import AlchPreview from './Components/AlchPreview.jsx';
 import NatureRunePanel from './Components/NatureRunePanel.jsx';
 import InfoPanel from './Components/InfoPanel.jsx';
+import ItemListEntry from './Components/ItemListEntry.jsx';
 
 import {
   NextButton,
@@ -37,6 +38,7 @@ function App() {
   const [data_GE, setGEData] = useState([]); //Data from the Grand Exchange
   const [allItems, setAllItems] = useState([]); //Item mapping data (names, values, icons)
   const [bestItems, setBestItems] = useState([]); //Top 10 best items to display in the carousel
+  const [extraBestItems, setExtraBestItems] = useState([]); //Remaining top items to display in a sidebar after the inital top 10
   const [compiledGEItems, setCompiledGEItems] = useState([]); //Combined data from GE data and item mapping to contain all the useful info we need
   const [itemVolumes, setItemVolumes] = useState([]);
   const [alchsPerHour, setAlchsPerHour] = useState(1000);
@@ -187,6 +189,15 @@ function App() {
       }
     }
     setBestItems(topTenItems); // Replace the entire array once with the new top 10
+
+    const moreSuggestedItems = [];
+    for (let j = 10; j < 30; j++) {
+      if (sortedArray[j]) {
+        moreSuggestedItems.push(sortedArray[j]);
+
+      }
+    }
+    setExtraBestItems(moreSuggestedItems);
   }
 }
 
@@ -219,7 +230,7 @@ function App() {
     <>
     <div className="background bg-gradient-to-b from-gray-400 to-slate-800">
       <div className="overlay bg-black/30 backdrop-blur-sm backdrop-brightness-50"></div>
-        <video src={backgroundVideo} autoPlay loop muted/>
+        <div className="bg-video-container"><video src={backgroundVideo} autoPlay loop muted/></div>
       <div className="content">
         <h1 className="text-4xl text-yellow-300 text-center font-bold mb-4 p-8">Alching Today</h1>
         <h2 className="text-2xl text-yellow-300 text-center font-bold mb-4">Here are 10 of the best items to consider high alching today:</h2>
@@ -240,6 +251,21 @@ function App() {
         <div className="embla__buttons">
           <PrevButton className="text-yellow-300" onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
           <NextButton className="text-yellow-300" onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+        </div>
+
+        <div className="items_sidebar">
+          {extraBestItems.map((item, index) => (
+                        <div key={index} style={{ cursor: "pointer" }} className="">
+                        <ItemListEntry 
+                            key={index} 
+                            name={item.name} 
+                            icon={item.icon}
+                            alch_value={item.high_alch}
+                            GE_value={item.value_high}
+                            trade_limit={item.trade_limit}
+                        />
+                        </div>
+                    ))}
         </div>
 
 
