@@ -37,52 +37,6 @@
     text-align: center;
 }
 
-.nature-rune-panel {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
-.nature-rune {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 32px;
-    margin-bottom: 10%;
-    gap: 32px;
-}
-
-.nature-rune img {
-    image-rendering: pixelated;
-    scale: 2.0;
-}
-
-.nature-rune h1 {
-    display: block;
-}
-
-.nature-rune p {
-    display: block;
-}
-
-.input-alchs-per-hour {
-    display: inline-flex;
-    justify-content: flex-end;
-    flex-direction: row;
-}
-
-.input-alchs-per-hour p {
-    margin-right: 1rem;
-}
-
-.sort-dropdown {
-    display: inline-flex;
-    justify-content: flex-end;
-    
-}
 
 @media only screen and (max-width: 640px) {
     .index-display {
@@ -112,51 +66,5 @@
     .alch-item img {
         image-rendering: pixelated;
         scale: 1.0;
-    }
-
-    .nature-rune {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 16px;
-        margin-bottom: 5%;
-        gap: 16px;
-    }
-
-    .nature-rune img {
-        image-rendering: pixelated;
-        scale: 1.0;
-    }
-
-    .nature-rune h1 {
-        display: flex;
-        font-size: x-small;
-    }
-
-    .nature-rune p {
-        display: flex;
-        font-size: x-small;
-    }
-
-    .nature-rune-panel {
-        gap: 5px;
-    }
-
-    .nature-rune-panel h1 {
-        font-size: small;
-    }
-
-    .nature-rune-panel p {
-        font-size: x-small;
-    }
-
-    .nature-rune-panel select {
-        font-size: x-small;
-    }
-
-    .input-alchs-per-hour {
-        display: flex;
-        justify-content: flex-end;
-        font-size: x-small;
     }
 }

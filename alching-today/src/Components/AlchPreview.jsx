@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import ContentLoader, { Instagram  } from 'react-content-loader';
 import './AlchPreview.css';
 
 export default function AlchPreview({ item, natureRuneCost, alchsPerHour }) {  return (
 
     <div className="text-yellow-300">
+      <div className="bg-taupe-500 rounded-lg shadow-lg p-4">
       {item ? (
         <>
-        <div className="bg-taupe-500 rounded-lg shadow-lg p-4">
           <div className="index-display">
             {item.index}
           </div>
@@ -28,11 +29,38 @@ export default function AlchPreview({ item, natureRuneCost, alchsPerHour }) {  r
             <p>Trade Limit: {item.trade_limit.toLocaleString()}</p>
             <p>Trade Volume: {item.volume.toLocaleString()}</p>
           </div>
-        </div>
         </>
       ) : (
-        <p>Loading best item...</p>
+        <>
+        <ContentLoader
+          speed={1}
+          width={320}
+          height={280}
+          viewBox="0 0 320 280"
+          backgroundColor="#2f2f2f"
+          foregroundColor="#525252"
+        >
+          {/* Index badge */}
+          <circle cx="280" cy="15" r="12" />
+          
+          {/* Item icon */}
+          <circle cx="60" cy="70" r="40" />
+          
+          {/* Item name */}
+          <rect x="110" y="50" rx="5" ry="5" width="160" height="20" />
+          
+          {/* Info lines */}
+          <rect x="0" y="130" rx="5" ry="5" width="320" height="12" />
+          <rect x="0" y="150" rx="5" ry="5" width="300" height="12" />
+          <rect x="0" y="170" rx="5" ry="5" width="280" height="12" />
+          <rect x="0" y="190" rx="5" ry="5" width="320" height="12" />
+          <rect x="0" y="210" rx="5" ry="5" width="300" height="12" />
+          <rect x="0" y="230" rx="5" ry="5" width="290" height="12" />
+          <rect x="0" y="250" rx="5" ry="5" width="310" height="12" />
+        </ContentLoader>
+      </>
       )}
+      </div>
     </div>
   );
 }

@@ -1,0 +1,103 @@
+.nature-rune-panel {
+    padding: 1.5rem;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.nature-rune {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 2%;
+}
+
+.nature-rune-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.nature-rune-price {
+    margin: 0;
+}
+
+.nature-rune img {
+    image-rendering: pixelated;
+    scale: 2.0;
+}
+
+.input-box {
+    width: 220px;
+    max-width: 100%;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.input-alchs-per-hour {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.input-alchs-per-hour p {
+  margin: 0;
+}
+
+.sort-dropdown {
+  margin-top: 0;
+}
+
+@media only screen and (max-width: 640px) {
+.nature-rune-panel {
+    padding: 0.75rem;
+    margin: 10px;
+}
+
+    .nature-rune {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 5%;
+        padding-left: 0;
+    }
+
+    .nature-rune img {
+        image-rendering: pixelated;
+        scale: 1.0;
+    }
+
+    .nature-rune-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .nature-rune h1 {
+        font-size: x-small;
+    }
+
+    .nature-rune p {
+        font-size: x-small;
+    }
+
+    .nature-rune-panel h1 {
+        font-size: small;
+    }
+
+    .nature-rune-panel p {
+        font-size: x-small;
+    }
+
+    .nature-rune-panel select {
+        font-size: x-small;
+    }
+
+    .input-alchs-per-hour {
+        display: flex;
+        justify-content: flex-end;
+        font-size: x-small;
+    }
+}

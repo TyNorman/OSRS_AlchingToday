@@ -16,7 +16,16 @@
 
 .item_entry img {
     image-rendering: pixelated;
-    scale: 1.0;
-    width: 32px;
-    height: 32px;
+    max-height: fit-content;
+    max-width: fit-content;
+}
+
+@media only screen and (max-width: 640px) {
+    .item_entry {
+        gap: 10px;
+    }
+
+    .item_details {
+        font-size: x-small;
+    }
 }

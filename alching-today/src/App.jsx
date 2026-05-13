@@ -48,6 +48,8 @@ function App() {
 
   const [natureRune, setNatureRune] = useState(null);
 
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+
   const [emblaRef, emblaApi] = useEmblaCarousel({loop: true, dragFree: true});
   const {
     prevBtnDisabled,
@@ -226,6 +228,27 @@ function App() {
     setAlchsPerHour(alchsPerHour || 0);
 }
 
+const [touchStartX, setTouchStartX] = useState(0);
+const [touchEndX, setTouchEndX] = useState(0);
+
+const handleTouchStart = (e) => {
+  setTouchStartX(e.targetTouches[0].clientX);
+};
+
+const handleTouchMove = (e) => {
+  setTouchEndX(e.targetTouches[0].clientX);
+};
+
+const handleTouchEnd = () => {
+  if (touchStartX - touchEndX > 50) {
+    // Swipe left: dismiss sidebar
+    setSidebarVisible(false);
+  } else if (touchEndX - touchStartX > 50) {
+    // Swipe right: show sidebar
+    setSidebarVisible(true);
+  }
+};
+
   return (
     <>
     <div className="background bg-gradient-to-b from-gray-400 to-slate-800">
@@ -237,13 +260,29 @@ function App() {
         <div className="alch-carousel px-8">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
-              {bestItems.map((currentItem, index) => (
-              <div key={index} style={{ cursor: "pointer" }} className={"embla__slide"}>
+              {bestItems.length === 0 ? (
+                // Show 10 empty skeleton loaders while loading
+                Array.from({ length: 10 }).map((_, index) => (
+                  <div key={index} style={{ cursor: "pointer" }} className="embla__slide">
                     <AlchPreview 
-                      item={bestItems[index]} natureRuneCost={natureRune.value} alchsPerHour={alchsPerHour}
+                      item={null} 
+                      natureRuneCost={natureRune?.value || 0} 
+                      alchsPerHour={alchsPerHour}
                     />
-                </div>
-              ))}
+                  </div>
+                ))
+              ) : (
+                // Show actual items once loaded
+                bestItems.map((currentItem, index) => (
+                  <div key={index} style={{ cursor: "pointer" }} className="embla__slide">
+                    <AlchPreview 
+                      item={bestItems[index]} 
+                      natureRuneCost={natureRune.value} 
+                      alchsPerHour={alchsPerHour}
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>    
@@ -253,20 +292,38 @@ function App() {
           <NextButton className="text-yellow-300" onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
 
-        <div className="items_sidebar">
-          {extraBestItems.map((item, index) => (
-                        <div key={index} style={{ cursor: "pointer" }} className="">
-                        <ItemListEntry 
-                            key={index} 
-                            name={item.name} 
-                            icon={item.icon}
-                            alch_value={item.high_alch}
-                            GE_value={item.value_high}
-                            trade_limit={item.trade_limit}
-                        />
-                        </div>
-                    ))}
+  <button 
+    className="sidebar-toggle text-yellow-300 bg-taupe-600 px-4 py-2 rounded mb-4" 
+    onClick={() => setSidebarVisible(!sidebarVisible)}
+  >
+    {sidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'}
+  </button>
+
+  <div className="sidebar-container">
+  {sidebarVisible && (
+    <div 
+      className="items_sidebar"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <h className="text-xl font-bold text-yellow-300">More items to consider:</h>
+      {extraBestItems.map((item, index) => (
+        <div key={index} style={{ cursor: "pointer" }} className="">
+          <ItemListEntry 
+            key={index} 
+            name={item.name} 
+            icon={item.icon}
+            alch_value={item.high_alch}
+            GE_value={item.value_high}
+            trade_limit={item.trade_limit}
+            nature_rune_cost={natureRune.value}
+          />
         </div>
+      ))}
+    </div>
+  )}
+</div>
 
 
         <div className="bottom_content">

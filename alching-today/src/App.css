@@ -64,21 +64,22 @@ video {
 
 .items_sidebar {
   position: fixed;
-    top: 10px;
-    right: 10px;
-    width: 300px;
-    height: calc(100% - 20px);
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 10px;
-    padding: 20px;
-    overflow-y: auto;
-    transition: transform 0.3s ease;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+  height: calc(100% - 20px);
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 3;
 }
 
 /* Embla Carousel Formatting */
 .alch-carousel {
-  max-width: 90%;
-  margin: auto;
+  max-width: 80%;
+  margin-left: 2%;
   position: relative;
 
   --slide-height: 100%;
@@ -158,40 +159,45 @@ video {
   font-weight: 600;
 }
 
-@media only screen and (max-width: 800px)  {
+@media only screen and (max-width: 800px) {
   .alch-carousel {
-  --slide-size: 40%;
-}
+    max-width: 100%;
+    margin: 0;
+    --slide-size: 40%;
+    --slide-height: 100%;
+  }
 
-.embla__controls {
-  display: flex;
-  grid-template-columns: auto 1fr;
-  justify-content: space-between;
-  gap: 5rem;
-  margin-top: 1rem;
-}
+  .embla__controls {
+    display: flex;
+    grid-template-columns: auto 1fr;
+    justify-content: space-between;
+    gap: 5rem;
+    margin-top: 1rem;
+  }
 
+  .embla__button__svg {
+    width: 25%;
+    height: 25%;
+  }
 
-.embla__button__svg {
-  width: 25%;
-  height: 25%;
-}
+  .bottom_content {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
 
-.bottom_content {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
+  .info_display {
+    display: block;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0;
+  }
 
-.info_display {
-  display: inline-block;
-  justify-content: center;
-  max-width: 30%;
-}
-
-.nature_rune_display {
-  display: inline-block;
-  justify-content: center;
-  padding-left: 2rem;
-  margin-bottom: 10px;
-}
+  .nature_rune_display {
+    display: block;
+    width: 100%;
+    justify-content: center;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
 }
