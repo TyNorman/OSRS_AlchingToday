@@ -17,9 +17,9 @@ import {
 import './App.css';
 
 let headers = new Headers({
-  "Accept"       : "application/json",
-  "Content-Type" : "application/json",
-  "User-Agent"   : "@MaldIncoming"
+  "Accept": "application/json",
+  "Content-Type": "application/json",
+  "User-Agent": "@MaldIncoming"
 });
 
 function Item_GE() {
@@ -50,7 +50,7 @@ function App() {
 
   const [sidebarVisible, setSidebarVisible] = useState(true);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({loop: true, dragFree: true});
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: true });
   const {
     prevBtnDisabled,
     nextBtnDisabled,
@@ -58,16 +58,16 @@ function App() {
     onNextButtonClick
   } = usePrevNextButtons(emblaApi);
 
-//ALL items: https://prices.runescape.wiki/api/v1/osrs/mapping
-//For every item valued above Nature Runes' GE price (ID 561), determine the highest profit difference between avg buy price and High Alch price
-//Additionally determine the best profit for high buy/sell volume items
+  //ALL items: https://prices.runescape.wiki/api/v1/osrs/mapping
+  //For every item valued above Nature Runes' GE price (ID 561), determine the highest profit difference between avg buy price and High Alch price
+  //Additionally determine the best profit for high buy/sell volume items
 
-//DO NOT Do a GET call on 'latest' per all 3700+ item IDs for the love of Guthix
+  //DO NOT Do a GET call on 'latest' per all 3700+ item IDs for the love of Guthix
 
-//Get items using https://prices.runescape.wiki/api/v1/osrs/1h for hourly avg price
+  //Get items using https://prices.runescape.wiki/api/v1/osrs/1h for hourly avg price
 
-//TODO: Use https://prices.runescape.wiki/api/v1/osrs/6h to determine trade volume per item to give realistic results
-//ITEM VOLUMES: https://oldschool.runescape.wiki/?title=Module:GEVolumes/data.json&action=raw&ctype=application%2Fjson
+  //TODO: Use https://prices.runescape.wiki/api/v1/osrs/6h to determine trade volume per item to give realistic results
+  //ITEM VOLUMES: https://oldschool.runescape.wiki/?title=Module:GEVolumes/data.json&action=raw&ctype=application%2Fjson
 
 
   // Fetch data on component mount (only once)
@@ -82,7 +82,7 @@ function App() {
         headers: { "Alching-Today-portfolio": headers }
       }),
       fetch('https://oldschool.runescape.wiki/?title=Module:GEVolumes/data.json&action=raw&ctype=application%2Fjson')
-      ])
+    ])
       .then((res) => Promise.all(res.map((response) => response.json())))
       .then(([latestData, mappingData, itemVolumesData]) => {
         setGEData(latestData);
@@ -93,22 +93,22 @@ function App() {
         const natureRuneData = getDatabaseItemByID(561, mappingData);
         console.log("Nature Rune Data:", natureRuneData);
 
-      const natureRunePrice = latestData.data['561']?.high || 180; //180 is the best price by NPCs while waiting to load
-  
-      // Set the Nature Rune data needed for the NatureRunePanel
-      const completeNatureRuneData = {
-        name: natureRuneData.name,
-        icon: 'https://oldschool.runescape.wiki/images/' + natureRuneData.icon.replace(/ /g,"_"),
-        value: natureRunePrice
-      };
-  
-      console.log("Nature Rune Data:", completeNatureRuneData);
-      setNatureRune(completeNatureRuneData);
+        const natureRunePrice = latestData.data['561']?.high || 180; //180 is the best price by NPCs while waiting to load
 
-      const itemArray = Init_GE_Data(latestData, mappingData, itemVolumesData);
-      setCompiledGEItems(itemArray);
+        // Set the Nature Rune data needed for the NatureRunePanel
+        const completeNatureRuneData = {
+          name: natureRuneData.name,
+          icon: 'https://oldschool.runescape.wiki/images/' + natureRuneData.icon.replace(/ /g, "_"),
+          value: natureRunePrice
+        };
 
-      setIsPending(false);
+        console.log("Nature Rune Data:", completeNatureRuneData);
+        setNatureRune(completeNatureRuneData);
+
+        const itemArray = Init_GE_Data(latestData, mappingData, itemVolumesData);
+        setCompiledGEItems(itemArray);
+
+        setIsPending(false);
       })
       .catch((err) => {
         console.error(err);
@@ -139,13 +139,13 @@ function App() {
         itemInfo.name = currentItemInfo.name;
         var iconName = currentItemInfo.icon;
         if (iconName)
-          iconName = iconName.replace(/ /g,"_");
+          iconName = iconName.replace(/ /g, "_");
         itemInfo.icon = 'https://oldschool.runescape.wiki/images/' + iconName;
         itemInfo.high_alch = currentItemInfo.highalch;
         itemInfo.trade_limit = currentItemInfo.limit;
-        itemInfo.volume = getVolumeForItem(itemInfo.name, itemVolumesData) || 1; 
+        itemInfo.volume = getVolumeForItem(itemInfo.name, itemVolumesData) || 1;
         itemInfo.daily_profit = (itemInfo.high_alch - itemInfo.value_high - natureRunePrice) * itemInfo.trade_limit;
-        
+
       }
       data_GE_ARRAY.push(itemInfo);
     }
@@ -168,44 +168,44 @@ function App() {
   }
 
   function getVolumeForItem(name, itemVolumesData) {
-      if (itemVolumesData[name])
-        return itemVolumesData[name];
+    if (itemVolumesData[name])
+      return itemVolumesData[name];
   }
 
   function handleSortChange(sortMethod) {
-  let sortedArray = [...compiledGEItems]; // Create a copy to avoid mutating the original
-  
-  if (sortMethod === 'profitValue') {
-    sortedArray = SortByHighAlch_MaxProfit(sortedArray, natureRune.value);
-  } else if (sortMethod === 'profitVolume') {
-    sortedArray = SortByHighAlch_Volume(sortedArray);
-  }
-  
-  if (sortedArray && sortedArray.length > 0) {
-    const topTenItems = [];
-    for (let i = 0; i < 10; i++) { // Get the top 10 best items to alch
-      if (sortedArray[i]) {
-        sortedArray[i].index = i + 1; 
-        topTenItems.push(sortedArray[i]);
-        console.log(sortedArray[i].name + " | index: " + sortedArray[i].index);
-      }
-    }
-    setBestItems(topTenItems); // Replace the entire array once with the new top 10
+    let sortedArray = [...compiledGEItems]; // Create a copy to avoid mutating the original
 
-    const moreSuggestedItems = [];
-    for (let j = 10; j < 30; j++) {
-      if (sortedArray[j]) {
-        moreSuggestedItems.push(sortedArray[j]);
-
-      }
+    if (sortMethod === 'profitValue') {
+      sortedArray = SortByHighAlch_MaxProfit(sortedArray, natureRune.value);
+    } else if (sortMethod === 'profitVolume') {
+      sortedArray = SortByHighAlch_Volume(sortedArray);
     }
-    setExtraBestItems(moreSuggestedItems);
+
+    if (sortedArray && sortedArray.length > 0) {
+      const topTenItems = [];
+      for (let i = 0; i < 10; i++) { // Get the top 10 best items to alch
+        if (sortedArray[i]) {
+          sortedArray[i].index = i + 1;
+          topTenItems.push(sortedArray[i]);
+          console.log(sortedArray[i].name + " | index: " + sortedArray[i].index);
+        }
+      }
+      setBestItems(topTenItems); // Replace the entire array once with the new top 10
+
+      const moreSuggestedItems = [];
+      for (let j = 10; j < 30; j++) {
+        if (sortedArray[j]) {
+          moreSuggestedItems.push(sortedArray[j]);
+
+        }
+      }
+      setExtraBestItems(moreSuggestedItems);
+    }
   }
-}
 
   function SortByHighAlch_Volume(data_GE_ARRAY) {
     console.log("START SortByHighAlch_Volume()");
-    
+
     // Sort by daily_profit in descending order (highest profit first)
     data_GE_ARRAY.sort((a, b) => b.daily_profit - a.daily_profit);
 
@@ -215,7 +215,7 @@ function App() {
 
   function SortByHighAlch_MaxProfit(data_GE_ARRAY, natureRunePrice) {
     console.log("START SortByHighAlch_MaxProfit()");
-    
+
     // Sort by daily_profit in descending order (highest profit first)
     data_GE_ARRAY.sort((a, b) => (b.high_alch - b.value_high - natureRunePrice) - (a.high_alch - a.value_high - natureRunePrice));
 
@@ -226,117 +226,109 @@ function App() {
   function handleAlchsPerHourChange(e) {
     var alchsPerHour = Math.min(Math.max(e.target.value, 0), 1200); //Cap the input alchs per hour to 1200 because no one is having that APM and has to wait for game ticks
     setAlchsPerHour(alchsPerHour || 0);
-}
-
-const [touchStartX, setTouchStartX] = useState(0);
-const [touchEndX, setTouchEndX] = useState(0);
-
-const handleTouchStart = (e) => {
-  setTouchStartX(e.targetTouches[0].clientX);
-};
-
-const handleTouchMove = (e) => {
-  setTouchEndX(e.targetTouches[0].clientX);
-};
-
-const handleTouchEnd = () => {
-  if (touchStartX - touchEndX > 50) {
-    // Swipe left: dismiss sidebar
-    setSidebarVisible(false);
-  } else if (touchEndX - touchStartX > 50) {
-    // Swipe right: show sidebar
-    setSidebarVisible(true);
   }
-};
+
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX - touchEndX > 50) {
+      // Swipe left: dismiss sidebar
+      setSidebarVisible(false);
+    } else if (touchEndX - touchStartX > 50) {
+      // Swipe right: show sidebar
+      setSidebarVisible(true);
+    }
+  };
 
   return (
     <>
-    <div className="background bg-gradient-to-b from-gray-400 to-slate-800">
-      <div className="overlay bg-black/30 backdrop-blur-sm backdrop-brightness-50"></div>
-        <div className="bg-video-container"><video src={backgroundVideo} autoPlay loop muted/></div>
-      <div className="content">
-        <h1 className="text-4xl text-yellow-300 text-center font-bold mb-4 p-8">Alching Today</h1>
-        <h2 className="text-2xl text-yellow-300 text-center font-bold mb-4">Here are 10 of the best items to consider high alching today:</h2>
-        <div className="alch-carousel px-8">
-          <div className="embla__viewport" ref={emblaRef}>
-            <div className="embla__container">
-              {bestItems.length === 0 ? (
-                // Show 10 empty skeleton loaders while loading
-                Array.from({ length: 10 }).map((_, index) => (
-                  <div key={index} style={{ cursor: "pointer" }} className="embla__slide">
-                    <AlchPreview 
-                      item={null} 
-                      natureRuneCost={natureRune?.value || 0} 
-                      alchsPerHour={alchsPerHour}
-                    />
-                  </div>
-                ))
-              ) : (
-                // Show actual items once loaded
-                bestItems.map((currentItem, index) => (
-                  <div key={index} style={{ cursor: "pointer" }} className="embla__slide">
-                    <AlchPreview 
-                      item={bestItems[index]} 
-                      natureRuneCost={natureRune.value} 
-                      alchsPerHour={alchsPerHour}
-                    />
-                  </div>
-                ))
-              )}
+      <div className="background bg-gradient-to-b from-gray-400 to-slate-800">
+        <div className="overlay bg-black/30 backdrop-blur-sm backdrop-brightness-50"></div>
+        <div className="bg-video-container"><video src={backgroundVideo} autoPlay loop muted /></div>
+        <div className="content">
+          <h1 className="text-4xl text-yellow-300 text-center font-bold mb-4 p-8">Alching Today</h1>
+          <h2 className="text-2xl text-yellow-300 text-center font-bold mb-4">Here are 10 of the best items to consider high alching today:</h2>
+          <div className="alch-carousel px-8">
+            <div className="embla__viewport" ref={emblaRef}>
+              <div className="embla__container">
+                {bestItems.length === 0 ? (
+                  // Show 10 empty skeleton loaders while loading
+                  Array.from({ length: 10 }).map((_, index) => (
+                    <div key={index} style={{ cursor: "pointer" }} className="embla__slide">
+                      <AlchPreview
+                        item={null}
+                        natureRuneCost={natureRune?.value || 0}
+                        alchsPerHour={alchsPerHour}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  // Show actual items once loaded
+                  bestItems.map((currentItem, index) => (
+                    <div key={index} style={{ cursor: "pointer" }} className="embla__slide">
+                      <AlchPreview
+                        item={bestItems[index]}
+                        natureRuneCost={natureRune.value}
+                        alchsPerHour={alchsPerHour}
+                      />
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
-        </div>    
 
-        <div className="embla__buttons">
-          <PrevButton className="text-yellow-300" onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton className="text-yellow-300" onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-        </div>
-
-  <button 
-    className="sidebar-toggle text-yellow-300 bg-taupe-600 px-4 py-2 rounded mb-4" 
-    onClick={() => setSidebarVisible(!sidebarVisible)}
-  >
-    {sidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'}
-  </button>
-
-  <div className="sidebar-container">
-  {sidebarVisible && (
-    <div 
-      className="items_sidebar"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
-      <h className="text-xl font-bold text-yellow-300">More items to consider:</h>
-      {extraBestItems.map((item, index) => (
-        <div key={index} style={{ cursor: "pointer" }} className="">
-          <ItemListEntry 
-            key={index} 
-            name={item.name} 
-            icon={item.icon}
-            alch_value={item.high_alch}
-            GE_value={item.value_high}
-            trade_limit={item.trade_limit}
-            nature_rune_cost={natureRune.value}
-          />
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-
-
-        <div className="bottom_content">
-          <div className="info_display">
-            <InfoPanel/>
+          <div className="embla__buttons">
+            <PrevButton className="text-yellow-300" onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+            <NextButton className="text-yellow-300" onClick={onNextButtonClick} disabled={nextBtnDisabled} />
           </div>
-          <div className="nature_rune_display">
-            <NatureRunePanel natureRuneInfo={natureRune} alchsPerHour={alchsPerHour} onAlchsPerHourChange={handleAlchsPerHourChange} onSortChange={handleSortChange} />
+
+          <div className="bottom_content">
+            <div className="info_display">
+              <InfoPanel />
+            </div>
+            <div className="nature_rune_display">
+              <NatureRunePanel natureRuneInfo={natureRune} alchsPerHour={alchsPerHour} onAlchsPerHourChange={handleAlchsPerHourChange} onSortChange={handleSortChange} />
+            </div>
+          </div>
+
+        </div>
+        <div className="sidebar-container">
+          <div
+            className="items_sidebar"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <h className="text-xl font-bold text-yellow-300">More items to consider:</h>
+            {extraBestItems.map((item, index) => (
+              <div key={index} style={{ cursor: "pointer" }} className="">
+                <ItemListEntry
+                  key={index}
+                  name={item.name}
+                  icon={item.icon}
+                  alch_value={item.high_alch}
+                  GE_value={item.value_high}
+                  trade_limit={item.trade_limit}
+                  nature_rune_cost={natureRune.value}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
-        </div>
       </div>
+
+
     </>
   );
 }

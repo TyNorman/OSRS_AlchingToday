@@ -1,3 +1,7 @@
+.alch-panel {
+    padding: 2%;
+}
+
 .dropShadow {
     filter: drop-shadow(5px 5px 5px #000000);
 }
@@ -44,23 +48,19 @@
         user-select: none;
         display: flex;
         justify-content: right;
-        align-self: flex-end;
-        top: 0%;
-        padding-right: 1%;
-        border-style: double;
-        border: #ffffff;
-        border-radius: 1%;
     }
 
     .alch-item {
+        display: flex;
         height: 16px;
-        margin-bottom: 5%;
+        margin-bottom: 10px;
         gap: 16px;
         font-size: x-small;
     }
 
     .alch-info {
         font-size: x-small;
+        display: flex;
     }
 
     .alch-item img {

@@ -2,19 +2,31 @@
   position: relative;
   min-height: 100vh;
   background-size: cover;
-  overflow: hidden;
+  overflow: visible;
+  height: 100vh;
+}
+
+@media only screen and (max-width: 800px) {
+  .background {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
 }
 
 .bg-video-container {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100vh;
   overflow: hidden;
   z-index: 0;
+  background-attachment: fixed;
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -37,6 +49,8 @@ video {
   display: flex;
   flex-direction: column;
   z-index: 2;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 .bottom_content {
@@ -76,6 +90,10 @@ video {
   z-index: 3;
 }
 
+.sidebar-container {
+  position: absolute;
+}
+
 /* Embla Carousel Formatting */
 .alch-carousel {
   max-width: 80%;
@@ -113,7 +131,8 @@ video {
 
 .embla__buttons {
   display: flex;
-  gap: 1rem; /* Space between prev/next buttons */
+  gap: 1rem;
+  /* Space between prev/next buttons */
   justify-content: center;
   margin-top: 0;
 }
@@ -160,6 +179,17 @@ video {
 }
 
 @media only screen and (max-width: 800px) {
+  .background {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .content {
+    max-height: none;
+    min-height: 100vh;
+  }
+
   .alch-carousel {
     max-width: 100%;
     margin: 0;
@@ -198,6 +228,22 @@ video {
     width: 100%;
     justify-content: center;
     padding-left: 0;
-    margin-bottom: 0;
+  }
+
+  .sidebar-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .items_sidebar {
+    position: relative;
+    width: auto;
+    margin: 0 auto;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
+    z-index: 2;
   }
 }

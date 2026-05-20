@@ -11,7 +11,7 @@ export default function InfoPanel() {
         <p>Profit values factor in the current cost of Nature Runes.</p>
         <p>You can also set your estimated alchs per hour, with tick-perfect typically being about 1200 alchs/hour.</p>
 
-        <p>You can check out the rest of my work here: <a href="https://tynorman.com/" className="text-yellow-300 underline">Portfolio Site</a></p>
+        <p>You can check out the rest of my work <a href="https://tynorman.com/" className="text-emerald-300 underline">here.</a></p>
     </div>
   );
 }

@@ -48,8 +48,8 @@ export default function NatureRunePanel({ natureRuneInfo, alchsPerHour, onAlchsP
             <circle cx="50" cy="50" r="30" />
             <rect x="100" y="25" rx="5" ry="5" width="220" height="20" />
             <rect x="100" y="55" rx="5" ry="5" width="180" height="12" />
-            <rect x="0" y="110" rx="5" ry="5" width="380" height="15" />
-            <rect x="0" y="135" rx="5" ry="5" width="280" height="15" />
+            <rect x="0" y="110" rx="5" ry="5" width="80%" height="15" />
+            <rect x="0" y="135" rx="5" ry="5" width="80%" height="15" />
           </ContentLoader>
         </>
       )}
