@@ -91,7 +91,6 @@ function App() {
 
         //TODO: Display the cost of Nature Runes in one of the corners eventually
         const natureRuneData = getDatabaseItemByID(561, mappingData);
-        console.log("Nature Rune Data:", natureRuneData);
 
         const natureRunePrice = latestData.data['561']?.high || 180; //180 is the best price by NPCs while waiting to load
 
@@ -102,7 +101,6 @@ function App() {
           value: natureRunePrice
         };
 
-        console.log("Nature Rune Data:", completeNatureRuneData);
         setNatureRune(completeNatureRuneData);
 
         const itemArray = Init_GE_Data(latestData, mappingData, itemVolumesData);
@@ -149,7 +147,6 @@ function App() {
       }
       data_GE_ARRAY.push(itemInfo);
     }
-    console.log("Initialized data_GE_ARRAY:", data_GE_ARRAY);
     return data_GE_ARRAY;
   }
 
@@ -187,7 +184,6 @@ function App() {
         if (sortedArray[i]) {
           sortedArray[i].index = i + 1;
           topTenItems.push(sortedArray[i]);
-          console.log(sortedArray[i].name + " | index: " + sortedArray[i].index);
         }
       }
       setBestItems(topTenItems); // Replace the entire array once with the new top 10
@@ -204,23 +200,15 @@ function App() {
   }
 
   function SortByHighAlch_Volume(data_GE_ARRAY) {
-    console.log("START SortByHighAlch_Volume()");
-
-    // Sort by daily_profit in descending order (highest profit first)
-    data_GE_ARRAY.sort((a, b) => b.daily_profit - a.daily_profit);
-
-    console.log("SORTED by daily_profit:", JSON.stringify(data_GE_ARRAY));
-    return data_GE_ARRAY;
+    const sortedArray = [...data_GE_ARRAY];
+    sortedArray.sort((a, b) => b.daily_profit - a.daily_profit);
+    return sortedArray;
   }
 
   function SortByHighAlch_MaxProfit(data_GE_ARRAY, natureRunePrice) {
-    console.log("START SortByHighAlch_MaxProfit()");
-
-    // Sort by daily_profit in descending order (highest profit first)
-    data_GE_ARRAY.sort((a, b) => (b.high_alch - b.value_high - natureRunePrice) - (a.high_alch - a.value_high - natureRunePrice));
-
-    console.log("SORTED by daily_profit:", JSON.stringify(data_GE_ARRAY));
-    return data_GE_ARRAY;
+    const sortedArray = [...data_GE_ARRAY];
+    sortedArray.sort((a, b) => (b.high_alch - b.value_high - natureRunePrice) - (a.high_alch - a.value_high - natureRunePrice));
+    return sortedArray;
   }
 
   function handleAlchsPerHourChange(e) {
@@ -283,7 +271,7 @@ function App() {
         </div>
         <div className="sidebar-container">
           <div className="items_sidebar">
-            <h className="text-xl font-bold text-yellow-300">More items to consider:</h>
+            <h1 className="text-xl font-bold text-yellow-300">More items to consider:</h1>
             {extraBestItems.map((item, index) => (
               <div key={index} style={{ cursor: "pointer" }} className="">
                 <ItemListEntry
