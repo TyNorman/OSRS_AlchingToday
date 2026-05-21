@@ -144,9 +144,13 @@ function App() {
         itemInfo.volume = getVolumeForItem(itemInfo.name, itemVolumesData) || 1;
         itemInfo.daily_profit = (itemInfo.high_alch - itemInfo.value_high - natureRunePrice) * itemInfo.trade_limit;
 
+        
       }
-      data_GE_ARRAY.push(itemInfo);
+      if (itemInfo != null) 
+        data_GE_ARRAY.push(itemInfo);
     }
+    
+    //console.log("Initialized data_GE_ARRAY:", data_GE_ARRAY);
     return data_GE_ARRAY;
   }
 
