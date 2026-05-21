@@ -33,28 +33,28 @@
     padding: 0.75rem;
     box-sizing: border-box;
     border-radius: 0.75rem;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .input-alchs-per-hour {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .input-alchs-per-hour p {
-  margin: 0;
+    margin: 0;
 }
 
 .sort-dropdown {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 @media only screen and (max-width: 640px) {
-.nature-rune-panel {
-    padding: 0.75rem;
-    margin: 10px;
-}
+    .nature-rune-panel {
+        padding: 0.75rem;
+        margin: 10px;
+    }
 
     .nature-rune {
         display: flex;
@@ -98,6 +98,14 @@
     .input-alchs-per-hour {
         display: flex;
         justify-content: flex-start;
-        font-size: x-small;
+    }
+
+    .input-box {
+        font-size: large;
+        max-width: 100%;
+        padding: 1rem;
+        box-sizing: border-box;
+        border-radius: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 }

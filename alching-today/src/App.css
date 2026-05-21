@@ -6,14 +6,6 @@
   height: 100vh;
 }
 
-@media only screen and (max-width: 800px) {
-  .background {
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
-  }
-}
-
 .bg-video-container {
   position: fixed;
   top: 0;
@@ -39,6 +31,7 @@ video {
   height: 100%;
   object-fit: cover;
   position: absolute;
+  touch-action: none;
 }
 
 .content {
@@ -121,20 +114,13 @@ video {
   padding-left: var(--slide-spacing);
 }
 
-.embla__controls {
-  display: flex;
-  grid-template-columns: auto 1fr;
-  justify-content: space-between;
-  gap: 10rem;
-  margin-top: 1.8rem;
-}
-
 .embla__buttons {
   display: flex;
   gap: 1rem;
-  /* Space between prev/next buttons */
   justify-content: center;
-  margin-top: 0;
+  align-items: center;
+  margin: 1% 0;
+  gap: 25%;
 }
 
 .embla__button {
@@ -143,23 +129,13 @@ video {
   appearance: none;
   background-color: transparent;
   touch-action: manipulation;
-  display: inline-flex;
-  text-decoration: none;
-  cursor: pointer;
-  border: 0;
-  padding: 0.5rem;
-  margin: 0;
-  border: 0.2rem solid var(--detail-medium-contrast);
-  width: 3.6rem;
-  height: 3.6rem;
-
-  z-index: 1;
-  border-radius: 50%;
-  color: var(--text-body);
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotate(0deg);
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--text-body);
+  justify-content: center;
 }
 
 .embla__button--disabled {
@@ -167,22 +143,15 @@ video {
 }
 
 .embla__button__svg {
-  width: 55%;
-  height: 55%;
-}
-
-.embla__selected-snap-display {
-  justify-self: flex-end;
-  align-self: center;
-  color: var(--text-low-contrast);
-  font-weight: 600;
+  width: 50px;
+  height: 50px;
 }
 
 @media only screen and (max-width: 800px) {
   .background {
     height: auto;
     min-height: 100vh;
-    overflow: visible;
+    overflow-x: hidden;
   }
 
   .content {
@@ -197,17 +166,19 @@ video {
     --slide-height: 100%;
   }
 
-  .embla__controls {
+  .embla__buttons {
     display: flex;
-    grid-template-columns: auto 1fr;
-    justify-content: space-between;
-    gap: 5rem;
-    margin-top: 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 25%;
+    width: 100%;
+    max-width: 100%;
+    margin: 2% 0;
   }
 
   .embla__button__svg {
-    width: 25%;
-    height: 25%;
+    width: 25px;
+    height: 25px;
   }
 
   .bottom_content {
@@ -234,12 +205,13 @@ video {
     position: relative;
     display: flex;
     justify-content: center;
+    overflow-x: hidden;
+    box-sizing: border-box;
     width: 100%;
   }
 
   .items_sidebar {
     position: relative;
-    width: auto;
     margin: 0 auto;
     height: auto;
     background-color: rgba(0, 0, 0, 0.8);
