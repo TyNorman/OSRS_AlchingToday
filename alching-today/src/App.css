@@ -166,6 +166,7 @@ video {
     --slide-height: 100%;
   }
 
+
   .embla__buttons {
     display: flex;
     justify-content: center;
@@ -173,7 +174,7 @@ video {
     gap: 25%;
     width: 100%;
     max-width: 100%;
-    margin: 2% 0;
+    margin: 4% 0;
   }
 
   .embla__button__svg {
@@ -205,17 +206,17 @@ video {
     position: relative;
     display: flex;
     justify-content: center;
-    overflow-x: hidden;
-    box-sizing: border-box;
+    overflow: hidden;
+    margin: 0 2%;
     width: 100%;
+    z-index: 2;
   }
 
   .items_sidebar {
     position: relative;
-    margin: 0 auto;
-    height: auto;
+    box-sizing: border-box;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
-    overflow-y: auto;
-    z-index: 2;
+    
   }
 }

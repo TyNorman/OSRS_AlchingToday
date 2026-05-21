@@ -228,27 +228,6 @@ function App() {
     setAlchsPerHour(alchsPerHour || 0);
   }
 
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchEndX, setTouchEndX] = useState(0);
-
-  const handleTouchStart = (e) => {
-    setTouchStartX(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStartX - touchEndX > 50) {
-      // Swipe left: dismiss sidebar
-      setSidebarVisible(false);
-    } else if (touchEndX - touchStartX > 50) {
-      // Swipe right: show sidebar
-      setSidebarVisible(true);
-    }
-  };
-
   return (
     <>
       <div className="background bg-gradient-to-b from-gray-400 to-slate-800">
@@ -303,12 +282,7 @@ function App() {
 
         </div>
         <div className="sidebar-container">
-          <div
-            className="items_sidebar"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
+          <div className="items_sidebar">
             <h className="text-xl font-bold text-yellow-300">More items to consider:</h>
             {extraBestItems.map((item, index) => (
               <div key={index} style={{ cursor: "pointer" }} className="">
